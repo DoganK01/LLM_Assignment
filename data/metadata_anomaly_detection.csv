@@ -1,0 +1,10 @@
+{
+    "anomaly_count": 4,
+    "contamination_level": 0.1,
+    "visualization_files": [
+        "anomaly_scatter.png",
+        "anomaly_score_histogram.png",
+        "isolation_tree_1.png",
+        "feature_importance_heatmap.png"
+    ]
+}
