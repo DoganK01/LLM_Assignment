@@ -115,7 +115,7 @@ Python serves as the backbone of the project, enabling modular design, efficient
 - **Type Hints**: Functions use type annotations (e.g., `Tuple[IsolationForest, np.ndarray, np.ndarray]`) for clarity and static type checking.
 - **Exception Handling**: Comprehensive `try-except` blocks ensure robustness (e.g., in `train_isolation_forest`).
 - **Parallel Processing**: `concurrent.futures.ThreadPoolExecutor` accelerates tasks like feature extraction and anomaly summarization.
-- **Object-Oriented Design**: `PipelineConfig` and `AugmentedText` (via Pydantic) encapsulate configuration and data models.
+- **Object-Oriented Design**: `PipelineConfig` and `PipelineRunRequest` (via Pydantic) encapsulate configuration and data models.
 - **File I/O**: Custom utilities (`load_dataset`, `save_dataset`) handle CSV and JSON operations.
 
 ### Example: Parallel Processing in `summarize_anomalies_parallel`
