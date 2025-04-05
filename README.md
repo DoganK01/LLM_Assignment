@@ -34,7 +34,32 @@ The anomaly detection pipeline is a multi-stage system designed to process text 
 
 The pipeline is orchestrated via a FastAPI-based RESTful API, enabling asynchronous execution and status monitoring. This project exemplifies the fusion of AI-driven NLP and unsupervised ML for anomaly detection.
 
----
+### Project Structure:
+
+```
+📂 project-root
+├── 📂 data
+├── 📂 images
+├── 📂 src
+│   ├── 🐍 __init__.py
+│   ├── 🐍 anomaly_detection.py
+│   ├── 🐍 config.py
+│   ├── 🐍 data_preparation.py
+│   ├── 🐍 evaluation.py
+│   ├── 🐍 feature_extraction.py
+│   ├── 🐍 models.py
+│   ├── 🐍 openai_client.py
+│   ├── 🐍 utils.py
+├── 🧪 .env.copy
+├── 🙈 .gitignore
+├── 📜 .python-version
+├── 🐍 app.py
+├── 🐍 instance.py
+├── 📜 LICENSE
+├── 📦 pyproject.toml
+├── 📄 README.md
+├── 🔒 uv.lock
+```
 
 ## Technology Stack
 
