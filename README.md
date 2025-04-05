@@ -22,8 +22,7 @@ This document provides an in-depth exploration of the implementation and utiliza
 9. [API Integration](#api-integration)
 10. [Scalability and Performance](#scalability-and-performance)
 11. [Error Handling and Logging](#error-handling-and-logging)
-12. [Future Enhancements](#future-enhancements)
-13. [Comments](#comments)
+12. [Future Enhancements and Comments](#future-enhancements-and-comments)
 
 ---
 
