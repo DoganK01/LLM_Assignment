@@ -275,7 +275,7 @@ Visualizations enhance understanding of anomaly detection results:
 
 ---
 
-## Future Enhancements
+## Future Enhancements and Comments
 
 Some limitations have been encountered since the synthetic data generated was not diverse and numerically large enough.
 
