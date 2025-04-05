@@ -147,13 +147,6 @@ The OpenAI GPT-4o model is a cornerstone of the pipeline, enhancing data augment
 
 3. **Anomaly Summarization (`anomaly_detection.py`)**
    - GPT-4o summarizes why flagged texts are anomalous, providing human-readable insights.
-   - Example:
-     ```python
-     response = client.chat.completions.create(
-         model="gpt-4o",
-         messages=[{"role": "user", "content": f"Summarize why this text might be an anomaly: '{text}'"}],
-     )
-     ```
 
 ### Technical Considerations
 - **Latency**: API calls introduce network latency; parallelization mitigates this.
