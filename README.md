@@ -1,9 +1,6 @@
-# LLM_Assignment
-
+# LLM-Powered Text Analysis and Anomaly Detection Pipeline
 
 ---
-
-# LLM-Powered Text Analysis and Anomaly Detection Pipeline
 
 This document provides an in-depth exploration of the implementation and utilization of Python, LLM, and Machine Learning, within an anomaly detection pipeline. The project integrates data preparation, feature extraction, anomaly detection, and evaluation into a cohesive system.
 
