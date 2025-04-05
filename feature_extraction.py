@@ -28,7 +28,6 @@ def extract_features_from_text(client, text: str) -> Dict[str, Union[List[str], 
             response_format=Features,
         )
         extracted_data = json.loads(response.choices[0].message.content)
-        #result = eval(response.choices[0].message.content)  # Replace with secure parsing in production.
         if not isinstance(extracted_data, dict) or not all(k in extracted_data for k in ["entities", "sentiment", "theme"]):
             raise ValueError("Invalid response format from OpenAI")
         return extracted_data
@@ -70,7 +69,7 @@ def vectorize_texts(client, df: pd.DataFrame, method: str = "tfidf") -> pd.DataF
         raise ValueError("Invalid vectorization method. Choose 'openai' or 'tfidf'.")
     return df
 
-def main_pipeline_feature_extraction(client, config: PipelineConfig, vectorization_method: str = "tfidf") -> None:
+def main_pipeline_feature_extraction(client_text, client_embedding, config: PipelineConfig, vectorization_method: str = "tfidf") -> None:
     """
     Pipeline step 2: Feature Extraction & Vectorization.
       - Loads data.
@@ -81,11 +80,11 @@ def main_pipeline_feature_extraction(client, config: PipelineConfig, vectorizati
       - Saves vectorized data and updates metadata.
     """
     df = load_dataset(config.prepared_data_file)
-    features = extract_features_parallel(client, df["text"].tolist())
+    features = extract_features_parallel(client_text, df["text"].tolist())
     df_features = pd.DataFrame(features)
     df = pd.concat([df, df_features], axis=1)
     save_dataset(df, config.feature_extraction_file)
-    df_vectorized = vectorize_texts(client, df, method=vectorization_method)
+    df_vectorized = vectorize_texts(client_embedding, df, method=vectorization_method)
     save_dataset(df_vectorized, config.vectorized_output_file)
     metadata = {
         "feature_rows": len(df),
@@ -96,5 +95,5 @@ def main_pipeline_feature_extraction(client, config: PipelineConfig, vectorizati
 
 if __name__ == "__main__":
     config = PipelineConfig()
-    client_text, _ = init_openai_client(config)
-    main_pipeline_feature_extraction(client_text, config)
+    client_text, client_embedding = init_openai_client(config)
+    main_pipeline_feature_extraction(client_text, client_embedding, config)

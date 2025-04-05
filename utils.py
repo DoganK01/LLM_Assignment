@@ -42,6 +42,7 @@ def update_metadata(metadata: Dict, metadata_path: str) -> None:
 
 
 def parse_embedding(embedding_str):
+    """Parses the embedding string into a list of floats."""
     try:
         embedding_str = embedding_str.strip()
 

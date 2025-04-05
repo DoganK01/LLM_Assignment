@@ -8,9 +8,6 @@ from openai import AzureOpenAI
 from config import PipelineConfig
 
 
-# ---------------------------
-# Helper: Recursively convert an object to a dictionary.
-# ---------------------------
 def recursive_as_dict(obj):
     if isinstance(obj, list):
         return [recursive_as_dict(item) for item in obj]
@@ -21,9 +18,6 @@ def recursive_as_dict(obj):
     else:
         return obj
 
-# ---------------------------
-# Pydantic Models for Chat Completion Response
-# ---------------------------
 class ChatCompletionMessage(BaseModel):
     content: str
     refusal: Optional[str] = None
@@ -67,9 +61,6 @@ class ChatCompletionResponse(BaseModel):
     usage: CompletionUsage
     prompt_filter_results: Optional[List[Dict[str, Any]]] = None
 
-# ---------------------------
-# Pydantic Models for Embeddings Response
-# ---------------------------
 class EmbeddingData(BaseModel):
     object: str
     index: int
@@ -110,9 +101,8 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     config = PipelineConfig()
     client_text, client_embedding = init_openai_client(config)
-    deployment_name = "gpt-4o"  # Replace with your actual deployment name
+    deployment_name = "gpt-4o"
 
-    # --- Chat Completion Example for Text Generation ---
     logging.info("Sending a test completion job")
     start_phrase = "Write a tagline for an ice cream shop. "
     try:
@@ -123,30 +113,22 @@ if __name__ == "__main__":
                 {"role": "user", "content": "Who were the founders of Microsoft?"}
             ]
         )
-        #print(response)
-        # Validate and parse the response using Pydantic
         response_dict = recursive_as_dict(response)
         chat_response = ChatCompletionResponse.model_validate(response_dict)
-        # Print the full JSON response (pretty-printed)
         print(chat_response.model_dump_json(indent=2))
-        # Print the generated content from the first choice
         print(chat_response.choices[0].message.content)
     except Exception as e:
         logging.error("Error during chat completion", exc_info=e)
 
-    # --- Embedding Creation Example ---
     try:
         embedding_response = client_embedding.embeddings.create(
             input="Your text string goes here",
             model="text-embedding-ada-002"
         )
-        # Validate and parse the embeddings response using Pydantic
         print(embedding_response)
         emb_response_dict = recursive_as_dict(embedding_response)
         emb_response = EmbeddingsResponse.model_validate(emb_response_dict)
-        # Print the full JSON response (pretty-printed)
         print(emb_response.model_dump_json(indent=2))
-        # Output the embedding vector from the first data item
         print("Embedding vector:")
         for value in emb_response.data[0].embedding:
             print(value)

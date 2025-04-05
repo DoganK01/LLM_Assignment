@@ -31,10 +31,9 @@ def augment_texts_with_gpt4o(client, texts: List[str]) -> List[Dict[str, Union[i
                     max_tokens=100,
                     temperature=1.5,
                 )
-                #print(response)
                 paraphrased_text = response.choices[0].message.content.strip()
                 synthetic_texts.append({
-                    "id": uuid.uuid4(),  # Ensuring unique IDs
+                    "id": uuid.uuid4(),
                     "text": paraphrased_text,
                     "timestamp": datetime.now().isoformat()
                 })
@@ -43,7 +42,7 @@ def augment_texts_with_gpt4o(client, texts: List[str]) -> List[Dict[str, Union[i
                 logging.error(f"Error generating augmented text for '{text}': {e}")
                 synthetic_texts.append({
                     "id": uuid.uuid4(),
-                    "text": text,  # Fallback to original text
+                    "text": text,
                     "timestamp": datetime.now().isoformat()
                 })
     return synthetic_texts

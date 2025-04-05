@@ -26,7 +26,7 @@ def train_isolation_forest(embeddings: np.ndarray, contamination: float = 0.1) -
         model = IsolationForest(contamination=contamination, n_estimators=200, max_samples=50, max_features=100, random_state=42, n_jobs=-1)
         model.fit(embeddings)
         anomaly_scores = model.decision_function(embeddings)
-        anomaly_predictions = model.predict(embeddings)  # -1 indicates anomalies
+        anomaly_predictions = model.predict(embeddings)
         return model, anomaly_scores, anomaly_predictions
     except Exception as e:
         logging.error(f"Error training Isolation Forest: {e}")
@@ -69,7 +69,10 @@ def summarize_anomalies_parallel(client, df: pd.DataFrame, num_workers: int = 5)
     return summaries
 
 def visualize_anomaly_results(df: pd.DataFrame, embeddings: np.ndarray, model: IsolationForest, output_dir: str):
-    # 1. Scatter Plot with PCA
+    """
+    Visualizes the results of the anomaly detection.
+    Generates scatter plots and histograms of anomaly scores.
+    """
     pca = PCA(n_components=2, random_state=42)
     embeddings_2d = pca.fit_transform(embeddings)
     df["pca_x"] = embeddings_2d[:, 0]
@@ -87,7 +90,6 @@ def visualize_anomaly_results(df: pd.DataFrame, embeddings: np.ndarray, model: I
     plt.savefig(f"{output_dir}/anomaly_scatter.png", dpi=300, bbox_inches="tight")
     plt.close()
 
-    # 2. Histogram of Anomaly Scores
     plt.figure(figsize=(10, 6))
     sns.histplot(df["anomaly_score"], bins=30, kde=True, color="blue")
     plt.axvline(x=0, color="red", linestyle="--", label="Decision Boundary (0)")
@@ -98,7 +100,6 @@ def visualize_anomaly_results(df: pd.DataFrame, embeddings: np.ndarray, model: I
     plt.savefig(f"{output_dir}/anomaly_score_histogram.png", dpi=300, bbox_inches="tight")
     plt.close()
 
-    # 3. Tree Visualization (First Tree)
     def export_tree_to_dot(tree, feature_names):
         dot_data = StringIO()
         dot_data.write("digraph Tree {\nnode [shape=box] ;\n")
@@ -125,16 +126,14 @@ def visualize_anomaly_results(df: pd.DataFrame, embeddings: np.ndarray, model: I
     graph = graphviz.Source(dot_data)
     graph.render(f"{output_dir}/isolation_tree_1", format="png", cleanup=True)
 
-    # 4. Heatmap of Feature Importance (Fixed)
-    n_features = embeddings.shape[1]  # 100 in your case
+    n_features = embeddings.shape[1]  # 100
     feature_usage = np.zeros(n_features)
     for tree in model.estimators_:
-        # Count how often each feature is used in splits (ignoring -2 for leaves)
         features_used = tree.tree_.feature[tree.tree_.feature >= 0]
         for feat in features_used:
             feature_usage[feat] += 1
-    feature_importance = feature_usage / feature_usage.sum()  # Normalize to [0, 1]
-    top_features = np.argsort(feature_importance)[-10:]  # Top 10 features
+    feature_importance = feature_usage / feature_usage.sum()
+    top_features = np.argsort(feature_importance)[-10:]
 
     plt.figure(figsize=(12, 8))
     sns.heatmap(embeddings[df["is_anomaly"]][:, top_features], cmap="YlOrRd", annot=False)
@@ -167,7 +166,6 @@ def main_pipeline_anomaly_detection(client, config: PipelineConfig, contaminatio
     
     model, anomaly_scores, anomaly_predictions = train_isolation_forest(X, contamination)
     df = detect_anomalies(df, model, anomaly_scores, anomaly_predictions)
-    # Generate anomaly summaries only for detected anomalies.
     df.loc[df["is_anomaly"], "anomaly_summary"] = summarize_anomalies_parallel(client, df)
     visualize_anomaly_results(df, X, model, config.images_file)
     save_dataset(df, config.anomaly_detection_file)
