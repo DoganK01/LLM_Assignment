@@ -20,6 +20,7 @@ This document provides an in-depth exploration of the implementation and utiliza
 10. [Scalability and Performance](#scalability-and-performance)
 11. [Error Handling and Logging](#error-handling-and-logging)
 12. [Future Enhancements and Comments](#future-enhancements-and-comments)
+13. [Installation and Usage](#installation-and-usage)
 
 ---
 
