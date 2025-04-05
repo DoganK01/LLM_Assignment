@@ -4,14 +4,14 @@ from datetime import datetime
 from fastapi import FastAPI, BackgroundTasks, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
-from config import PipelineConfig
-from models import PipelineRunRequest, PipelineStatusResponse
-from openai_client import init_openai_client
+from src.config import PipelineConfig
+from src.models import PipelineRunRequest, PipelineStatusResponse
+from src.openai_client import init_openai_client
 
-from data_preparation import main_pipeline_data_preparation
-from feature_extraction import main_pipeline_feature_extraction
-from anomaly_detection import main_pipeline_anomaly_detection
-from evaluation import main_pipeline_evaluation
+from src.data_preparation import main_pipeline_data_preparation
+from src.feature_extraction import main_pipeline_feature_extraction
+from src.anomaly_detection import main_pipeline_anomaly_detection
+from src.evaluation import main_pipeline_evaluation
 
 pipeline_status = {"status": "idle", "timestamp": datetime.utcnow()}
 

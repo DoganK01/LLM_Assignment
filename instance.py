@@ -36,6 +36,8 @@ def run_pipeline_with_defaults():
     response = requests.post(f"{BASE_URL}/pipeline/run", json={})
     return response.json()
 
+# An example of how to run the pipeline with custom configuration. For more information, refer to the .env.example file.
+
 def run_pipeline_with_custom_config():
     """
     Run the pipeline with custom configuration parameters.
